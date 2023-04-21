@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
 
@@ -12,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemsDtoResponse {
-    private ObjectId id;
+    private Integer id;
     private String name;
     private String description;
     private LocalDate creationDate;

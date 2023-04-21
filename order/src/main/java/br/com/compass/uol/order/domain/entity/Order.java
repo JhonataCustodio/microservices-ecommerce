@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-    private ObjectId id;
+    private Integer id;
     private String cpf;
     private List<Items> items;
     private Double amount;
