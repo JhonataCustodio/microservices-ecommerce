@@ -5,10 +5,7 @@ import br.com.compass.uol.order.domain.dto.response.OrderDtoResponse;
 import br.com.compass.uol.order.domain.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,11 @@ public class OrderController {
     @GetMapping("/api/order")
     public ResponseEntity<List<OrderDtoResponse>> getAll(){
         List<OrderDtoResponse> orderDtoResponses = orderService.getAll();
+        return ResponseEntity.ok(orderDtoResponses);
+    }
+    @GetMapping("/api/order/{cpf}")
+    public ResponseEntity<List<OrderDtoResponse>> getByCpf(@PathVariable String cpf){
+        List<OrderDtoResponse> orderDtoResponses = orderService.getByCpf(cpf);
         return ResponseEntity.ok(orderDtoResponses);
     }
 }
