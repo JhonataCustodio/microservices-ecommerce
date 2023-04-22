@@ -52,4 +52,10 @@ public class OrderService {
                 .map(order -> modelMapper.map(order, OrderDtoResponse.class)).collect(Collectors.toList());
         return orderDtoResponses;
     }
+    public List<OrderDtoResponse> getByAmount(){
+        List<Order> orders = orderRepository.findAllByOrderByAmountAsc();
+        List<OrderDtoResponse> orderDtoResponses = orders.stream()
+                .map(order -> modelMapper.map(order, OrderDtoResponse.class)).collect(Collectors.toList());
+        return orderDtoResponses;
+    }
 }
