@@ -8,7 +8,9 @@ import br.com.compass.uol.order.domain.enums.OrderStatus;
 import br.com.compass.uol.order.domain.enums.PaymentStatus;
 import br.com.compass.uol.order.domain.repository.ItemsRepository;
 import br.com.compass.uol.order.domain.repository.OrderRepository;
+import br.com.compass.uol.order.domain.repository.OrderValidator;
 import br.com.compass.uol.order.factory.OrderFactory;
+import br.com.compass.uol.order.factory.OrderValidationFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
-
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -28,13 +29,12 @@ public class OrderService {
     private ItemsRepository itemsRepository;
     @Autowired
     private OrderFactory orderFactory;
+    @Autowired
+    private OrderValidationFactory orderValidationFactory;
     @Transactional
     public OrderDtoResponse save(OrderDtoRequest request){
-        if(!EnumSet.allOf(OrderStatus.class).contains(request.getOrderStatus())){
-            throw new RuntimeException("Error the order status field needs to be filled");
-        }else if(!EnumSet.allOf(PaymentStatus.class).contains(request.getPaymentStatus())){
-            throw new RuntimeException("Error the payment status field needs to be filled");
-        }
+        OrderValidator validator = orderValidationFactory.getValidator(request);
+        validator.validate(request);
         Optional<Items> items = itemsRepository.findById(request.getItems().getId());
         List<Items> itemsList = items.map(Collections::singletonList).orElse(Collections.emptyList());
         Order order = orderFactory.createOrder(request);
