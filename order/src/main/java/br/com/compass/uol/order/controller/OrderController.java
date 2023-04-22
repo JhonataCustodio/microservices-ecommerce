@@ -28,4 +28,10 @@ public class OrderController {
         List<OrderDtoResponse> orderDtoResponses = orderService.getByCpf(cpf);
         return ResponseEntity.ok(orderDtoResponses);
     }
+    @GetMapping("/api/order/amount")
+    public ResponseEntity<List<OrderDtoResponse>> getByAmount(){
+        List<OrderDtoResponse> orderDtoResponses = orderService.getByAmount();
+        return ResponseEntity.ok(orderDtoResponses);
+    }
+
 }
