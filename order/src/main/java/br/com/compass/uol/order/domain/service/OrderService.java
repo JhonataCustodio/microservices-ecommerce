@@ -4,6 +4,8 @@ import br.com.compass.uol.order.domain.dto.request.OrderDtoRequest;
 import br.com.compass.uol.order.domain.dto.response.OrderDtoResponse;
 import br.com.compass.uol.order.domain.entity.Items;
 import br.com.compass.uol.order.domain.entity.Order;
+import br.com.compass.uol.order.domain.enums.OrderStatus;
+import br.com.compass.uol.order.domain.enums.PaymentStatus;
 import br.com.compass.uol.order.domain.repository.ItemsRepository;
 import br.com.compass.uol.order.domain.repository.OrderRepository;
 import br.com.compass.uol.order.domain.repository.OrderValidator;
@@ -67,6 +69,18 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order id not found"));
         orderRepository.delete(order);
+        return modelMapper.map(order, OrderDtoResponse.class);
+    }
+    public  OrderDtoResponse update(Integer id, OrderDtoRequest request){
+        Order order = orderRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Order id not found"));
+        OrderValidator validator = orderValidationFactory.getValidator(request);
+        validator.validate(request);
+        order.setCpf(request.getCpf());
+        order.setAmount(request.getAmount());
+        order.setOrderStatus(OrderStatus.valueOf(request.getOrderStatus().toString()));
+        order.setPaymentStatus(PaymentStatus.valueOf(request.getPaymentStatus().toString()));
+        orderRepository.save(order);
         return modelMapper.map(order, OrderDtoResponse.class);
     }
 }
