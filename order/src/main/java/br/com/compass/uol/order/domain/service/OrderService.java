@@ -4,8 +4,6 @@ import br.com.compass.uol.order.domain.dto.request.OrderDtoRequest;
 import br.com.compass.uol.order.domain.dto.response.OrderDtoResponse;
 import br.com.compass.uol.order.domain.entity.Items;
 import br.com.compass.uol.order.domain.entity.Order;
-import br.com.compass.uol.order.domain.enums.OrderStatus;
-import br.com.compass.uol.order.domain.enums.PaymentStatus;
 import br.com.compass.uol.order.domain.repository.ItemsRepository;
 import br.com.compass.uol.order.domain.repository.OrderRepository;
 import br.com.compass.uol.order.domain.repository.OrderValidator;
@@ -47,5 +45,11 @@ public class OrderService {
         return orders.stream()
                 .map(order -> modelMapper.map(order, OrderDtoResponse.class))
                 .collect(Collectors.toList());
+    }
+    public List<OrderDtoResponse> getByCpf(String cpf){
+        List<Order> orders = orderRepository.searchByCpf(cpf);
+        List<OrderDtoResponse> orderDtoResponses = orders.stream()
+                .map(order -> modelMapper.map(order, OrderDtoResponse.class)).collect(Collectors.toList());
+        return orderDtoResponses;
     }
 }
