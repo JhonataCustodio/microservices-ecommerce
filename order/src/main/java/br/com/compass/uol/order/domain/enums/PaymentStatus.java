@@ -9,7 +9,8 @@ public enum PaymentStatus {
     PROCESSING("processing"),
     REJECTED("rejected"),
     APPROVED("approved");
-    private String status;
+    private final String status;
+
     public static PaymentStatus fromString(String status) {
         return valueOf(status.toUpperCase());
     }

@@ -11,7 +11,9 @@ public enum OrderStatus {
     CANCELED("canceled");
 
     private final String status;
+
     public static OrderStatus fromString(String status) {
         return valueOf(status.toUpperCase());
     }
+
 }
