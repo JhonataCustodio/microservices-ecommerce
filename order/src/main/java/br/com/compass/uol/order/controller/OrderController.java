@@ -33,5 +33,10 @@ public class OrderController {
         List<OrderDtoResponse> orderDtoResponses = orderService.getByAmount();
         return ResponseEntity.ok(orderDtoResponses);
     }
+    @GetMapping("/api/order/id/{id}")
+    public ResponseEntity<OrderDtoResponse> getById(@PathVariable Integer id){
+        OrderDtoResponse orderDtoResponse = orderService.getById(id);
+        return ResponseEntity.ok(orderDtoResponse);
+    }
 
 }

@@ -58,4 +58,9 @@ public class OrderService {
                 .map(order -> modelMapper.map(order, OrderDtoResponse.class)).collect(Collectors.toList());
         return orderDtoResponses;
     }
+    public OrderDtoResponse getById(Integer id){
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order id not found"));
+        return modelMapper.map(order, OrderDtoResponse.class);
+    }
 }
