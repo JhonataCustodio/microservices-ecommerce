@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDtoRequest {
     private String cpf;
-    private List<Items> items;
+    private Items items;
     private Double amount;
     private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
