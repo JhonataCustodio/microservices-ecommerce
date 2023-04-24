@@ -11,7 +11,12 @@ public enum PaymentStatus {
     APPROVED("approved");
     private final String status;
 
-    public static PaymentStatus fromString(String status) {
-        return valueOf(status.toUpperCase());
+    public static boolean isValid(String status) {
+        for (PaymentStatus paymentStatus : PaymentStatus.values()) {
+            if (paymentStatus.getStatus().equalsIgnoreCase(status)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

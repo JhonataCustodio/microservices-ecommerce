@@ -12,8 +12,13 @@ public enum OrderStatus {
 
     private final String status;
 
-    public static OrderStatus fromString(String status) {
-        return valueOf(status.toUpperCase());
+    public static boolean isValid(String status) {
+        for (OrderStatus orderStatus : OrderStatus.values()) {
+            if (orderStatus.getStatus().equalsIgnoreCase(status)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
