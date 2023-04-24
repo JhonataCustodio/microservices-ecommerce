@@ -6,6 +6,7 @@ import br.com.compass.uol.order.domain.entity.Items;
 import br.com.compass.uol.order.domain.entity.Order;
 import br.com.compass.uol.order.domain.enums.OrderStatus;
 import br.com.compass.uol.order.domain.enums.PaymentStatus;
+import br.com.compass.uol.order.domain.exception.MessageExceptionNotFound;
 import br.com.compass.uol.order.domain.repository.ItemsRepository;
 import br.com.compass.uol.order.domain.repository.OrderRepository;
 import br.com.compass.uol.order.domain.repository.OrderValidator;
@@ -34,7 +35,9 @@ public class OrderService {
     @Transactional
     public OrderDtoResponse save(OrderDtoRequest request){
         OrderValidator validator = orderValidationFactory.getValidator(request);
-        validator.validate(request);
+        if (validator != null) {
+            validator.validate(request);
+        }
         Optional<Items> items = itemsRepository.findById(request.getItems().getId());
         List<Items> itemsList = items.map(Collections::singletonList).orElse(Collections.emptyList());
         Order order = orderFactory.createOrder(request);
@@ -62,21 +65,24 @@ public class OrderService {
     }
     public OrderDtoResponse getById(Integer id){
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order id not found"));
+                .orElseThrow(() -> new MessageExceptionNotFound("Order id not found"));
         return modelMapper.map(order, OrderDtoResponse.class);
     }
     public OrderDtoResponse delete(Integer id){
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order id not found"));
+                .orElseThrow(() -> new MessageExceptionNotFound("Order id not found"));
         orderRepository.delete(order);
         return modelMapper.map(order, OrderDtoResponse.class);
     }
     public  OrderDtoResponse update(Integer id, OrderDtoRequest request){
         Order order = orderRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Order id not found"));
+                .orElseThrow(()-> new MessageExceptionNotFound("Order id not found"));
         OrderValidator validator = orderValidationFactory.getValidator(request);
-        validator.validate(request);
+        if (validator != null) {
+            validator.validate(request);
+        }
         order.setCpf(request.getCpf());
+        order.setItems(order.getItems());
         order.setAmount(request.getAmount());
         order.setOrderStatus(OrderStatus.valueOf(request.getOrderStatus().toString()));
         order.setPaymentStatus(PaymentStatus.valueOf(request.getPaymentStatus().toString()));

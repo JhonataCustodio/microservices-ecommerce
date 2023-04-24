@@ -10,16 +10,29 @@ import br.com.compass.uol.order.factory.validation.PaymentStatusValidator;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
+import java.util.stream.Stream;
+
 
 @Component
 public class OrderValidationFactory {
     public OrderValidator getValidator(OrderDtoRequest request) {
-        if(!EnumSet.allOf(OrderStatus.class).contains(request.getOrderStatus())) {
+        boolean anyFieldIsEmpty = Stream.of(
+                        request.getCpf(),
+                        request.getItems().getId(),
+                        request.getAmount(),
+                        request.getOrderStatus(),
+                        request.getPaymentStatus())
+
+                .anyMatch(field -> field == null || field == "");
+        if (anyFieldIsEmpty) {
+            return new DefaultOrderValidator();
+        }
+        else if(!EnumSet.allOf(OrderStatus.class).contains(request.getOrderStatus())){
             return new OrderStatusValidator();
-        } else if(!EnumSet.allOf(PaymentStatus.class).contains(request.getPaymentStatus())) {
+        }else if(!EnumSet.allOf(PaymentStatus.class).contains(request.getPaymentStatus())){
             return new PaymentStatusValidator();
         } else {
-            return new DefaultOrderValidator();
+            return null;
         }
     }
 }
