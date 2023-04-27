@@ -10,3 +10,17 @@ services:
       POSTGRES_DB: mydb
     ports:
       - "5432:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - rabbitmq-network
+
+networks:
+  my-network:
+  rabbitmq-network:
+    driver: bridge

@@ -5,3 +5,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:example@localhost:27018/ms-payment
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
