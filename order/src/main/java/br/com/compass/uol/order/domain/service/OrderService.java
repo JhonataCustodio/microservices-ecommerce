@@ -1,5 +1,6 @@
 package br.com.compass.uol.order.domain.service;
 
+import br.com.compass.uol.order.config.RabbitMQConfig;
 import br.com.compass.uol.order.domain.dto.request.OrderDtoRequest;
 import br.com.compass.uol.order.domain.dto.response.OrderDtoResponse;
 import br.com.compass.uol.order.domain.entity.Items;
@@ -13,6 +14,8 @@ import br.com.compass.uol.order.domain.repository.OrderValidator;
 import br.com.compass.uol.order.factory.OrderFactory;
 import br.com.compass.uol.order.factory.OrderValidationFactory;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +35,8 @@ public class OrderService {
     private OrderFactory orderFactory;
     @Autowired
     private OrderValidationFactory orderValidationFactory;
+    @Autowired
+    private RabbitTemplate template;
     @Transactional
     public OrderDtoResponse save(OrderDtoRequest request){
         OrderValidator validator = orderValidationFactory.getValidator(request);
@@ -43,6 +48,7 @@ public class OrderService {
         Order order = orderFactory.createOrder(request);
         order.setItems(itemsList);
         orderRepository.save(order);
+        template.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY, order);
         return orderFactory.createOrderDtoResponse(order);
     }
     public List<OrderDtoResponse> getAll() {
