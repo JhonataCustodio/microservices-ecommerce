@@ -1,9 +1,11 @@
 package br.com.compass.uol.payment.domain.service;
 
+import br.com.compass.uol.payment.config.RabbitMQConfig;
 import br.com.compass.uol.payment.domain.document.Payment;
 import br.com.compass.uol.payment.domain.dto.PaymentDtoResponse;
 import br.com.compass.uol.payment.domain.repository.PaymentRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,9 @@ public class PaymentService {
         List<PaymentDtoResponse> paymentDtoResponses = payments.stream()
                 .map(payment -> modelMapper.map(payment, PaymentDtoResponse.class)).collect(Collectors.toList());
         return  paymentDtoResponses;
+    }
+    @RabbitListener(queues = RabbitMQConfig.QUEUE)
+    public void receiveMessage(Payment payment) {
+        paymentRepository.save(payment);
     }
 }
