@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDtoRequest {
-    private Double totalOrder;
+    private Double amount;
     private String paymentStatus;
 }

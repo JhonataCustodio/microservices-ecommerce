@@ -2,6 +2,7 @@ package br.com.compass.uol.payment.domain.service;
 
 import br.com.compass.uol.payment.config.RabbitMQConfig;
 import br.com.compass.uol.payment.domain.document.Payment;
+import br.com.compass.uol.payment.domain.dto.PaymentDtoRequest;
 import br.com.compass.uol.payment.domain.dto.PaymentDtoResponse;
 import br.com.compass.uol.payment.domain.repository.PaymentRepository;
 import org.modelmapper.ModelMapper;
@@ -25,7 +26,10 @@ public class PaymentService {
         return  paymentDtoResponses;
     }
     @RabbitListener(queues = RabbitMQConfig.QUEUE)
-    public void receiveMessage(Payment payment) {
+    public void receiveMessage(PaymentDtoRequest request) {
+        Payment payment = new Payment();
+        payment.setTotalOrder(request.getAmount());
+        payment.setPaymentStatus("APPROVED");
         paymentRepository.save(payment);
     }
 }
