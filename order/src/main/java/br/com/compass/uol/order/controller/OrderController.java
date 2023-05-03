@@ -39,9 +39,9 @@ public class OrderController {
         return ResponseEntity.ok(orderDtoResponse);
     }
     @DeleteMapping("/api/order/{id}")
-    public ResponseEntity<OrderDtoResponse> delete(@PathVariable Integer id){
-        OrderDtoResponse orderDtoResponse = orderService.delete(id);
-        return ResponseEntity.ok(orderDtoResponse);
+    public ResponseEntity<String> delete(@PathVariable Integer id){
+        String message = orderService.delete(id);
+        return ResponseEntity.ok(message);
     }
     @PutMapping("/api/order/{id}")
     public ResponseEntity<OrderDtoResponse> update(@PathVariable Integer id, @RequestBody OrderDtoRequest request){
