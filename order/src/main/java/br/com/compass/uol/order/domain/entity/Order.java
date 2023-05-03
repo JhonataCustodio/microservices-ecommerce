@@ -32,4 +32,7 @@ public class Order {
     @Column(name = "payment_status")
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+
+    public Order(String cpf, String items, String amount, String orderStatus, String paymentStatus) {
+    }
 }

@@ -12,12 +12,20 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class OrderDtoResponse {
     private Integer id;
     private String cpf;
-    private List<Items> items;
+    private List<ItemsDtoResponse> items;
     private Double amount;
     private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
+
+    public OrderDtoResponse(String cpf, List<ItemsDtoResponse> items, Double amount, OrderStatus orderStatus, PaymentStatus paymentStatus) {
+        this.cpf = cpf;
+        this.items = items;
+        this.amount = amount;
+        this.orderStatus = orderStatus;
+        this.paymentStatus = paymentStatus;
+    }
+
 }
