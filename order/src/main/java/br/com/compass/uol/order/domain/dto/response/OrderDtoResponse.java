@@ -12,6 +12,7 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderDtoResponse {
     private Integer id;
     private String cpf;
