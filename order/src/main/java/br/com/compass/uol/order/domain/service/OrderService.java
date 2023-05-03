@@ -11,11 +11,11 @@ import br.com.compass.uol.order.domain.exception.MessageExceptionNotFound;
 import br.com.compass.uol.order.domain.repository.ItemsRepository;
 import br.com.compass.uol.order.domain.repository.OrderRepository;
 import br.com.compass.uol.order.domain.repository.OrderValidator;
+import br.com.compass.uol.order.factory.ItemsDtoResponseFactory;
 import br.com.compass.uol.order.factory.OrderFactory;
 import br.com.compass.uol.order.factory.OrderValidationFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,31 +54,60 @@ public class OrderService {
     public List<OrderDtoResponse> getAll() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
-                .map(order -> modelMapper.map(order, OrderDtoResponse.class))
+                .map(order -> new OrderDtoResponse(
+                        order.getId(),
+                        order.getCpf(),
+                        ItemsDtoResponseFactory.createFromItems(order.getItems()),
+                        order.getAmount(),
+                        order.getOrderStatus(),
+                        order.getPaymentStatus()
+                ))
                 .collect(Collectors.toList());
     }
+
     public List<OrderDtoResponse> getByCpf(String cpf){
         List<Order> orders = orderRepository.searchByCpf(cpf);
-        List<OrderDtoResponse> orderDtoResponses = orders.stream()
-                .map(order -> modelMapper.map(order, OrderDtoResponse.class)).collect(Collectors.toList());
-        return orderDtoResponses;
+        return orders.stream()
+                .map(order -> new OrderDtoResponse(
+                        order.getId(),
+                        order.getCpf(),
+                        ItemsDtoResponseFactory.createFromItems(order.getItems()),
+                        order.getAmount(),
+                        order.getOrderStatus(),
+                        order.getPaymentStatus()
+                ))
+                .collect(Collectors.toList());
     }
     public List<OrderDtoResponse> getByAmount(){
         List<Order> orders = orderRepository.findAllByOrderByAmountAsc();
-        List<OrderDtoResponse> orderDtoResponses = orders.stream()
-                .map(order -> modelMapper.map(order, OrderDtoResponse.class)).collect(Collectors.toList());
-        return orderDtoResponses;
+        return orders.stream()
+                .map(order -> new OrderDtoResponse(
+                        order.getId(),
+                        order.getCpf(),
+                        ItemsDtoResponseFactory.createFromItems(order.getItems()),
+                        order.getAmount(),
+                        order.getOrderStatus(),
+                        order.getPaymentStatus()
+                ))
+                .collect(Collectors.toList());
     }
     public OrderDtoResponse getById(Integer id){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new MessageExceptionNotFound("Order id not found"));
-        return modelMapper.map(order, OrderDtoResponse.class);
+        OrderDtoResponse orderDtoResponse = new OrderDtoResponse();
+        orderDtoResponse.setId(order.getId());
+        orderDtoResponse.setCpf(order.getCpf());
+        orderDtoResponse.setItems(ItemsDtoResponseFactory.createFromItems(order.getItems()));
+        orderDtoResponse.setAmount(order.getAmount());
+        orderDtoResponse.setOrderStatus(order.getOrderStatus());
+        orderDtoResponse.setPaymentStatus(order.getPaymentStatus());
+        return orderDtoResponse;
     }
-    public OrderDtoResponse delete(Integer id){
+    public String delete(Integer id){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new MessageExceptionNotFound("Order id not found"));
         orderRepository.delete(order);
-        return modelMapper.map(order, OrderDtoResponse.class);
+        return "Order removed";
     }
     public  OrderDtoResponse update(Integer id, OrderDtoRequest request){
         Order order = orderRepository.findById(id)
