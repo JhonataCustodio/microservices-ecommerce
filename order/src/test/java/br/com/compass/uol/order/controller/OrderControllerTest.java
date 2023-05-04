@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,5 +101,28 @@ public class OrderControllerTest {
         assertThat(orders.get(0).getAmount()).isEqualTo(orderDtoResponse.getAmount());
         assertThat(orders.get(0).getOrderStatus()).isEqualTo(orderDtoResponse.getOrderStatus());
         assertThat(orders.get(0).getPaymentStatus()).isEqualTo(orderDtoResponse.getPaymentStatus());
+    }
+    @Test
+    public void getById_ReturnsListOfOrderDtoResponse(){
+        Integer id = OrderConstants.ORDER.getId();
+        when(orderService.getById(id)).thenReturn(OrderConstants.ORDER_RESPONSE);
+        ResponseEntity<OrderDtoResponse> response = orderController.getById(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(OrderConstants.ORDER_RESPONSE, response.getBody());
+
+        OrderDtoResponse orderDtoResponse = response.getBody();
+        assertEquals(OrderConstants.ORDER.getId(), orderDtoResponse.getId());
+        assertThat(orderDtoResponse.getCpf()).isEqualTo(orderDtoResponse.getCpf());
+        assertThat(orderDtoResponse.getItems().get(0).getId()).isEqualTo(orderDtoResponse.getItems().get(0).getId());
+        assertThat(orderDtoResponse.getItems().get(0).getName()).isEqualTo(orderDtoResponse.getItems().get(0).getName());
+        assertThat(orderDtoResponse.getItems().get(0).getDescription()).isEqualTo(orderDtoResponse.getItems().get(0).getDescription());
+        assertThat(orderDtoResponse.getItems().get(0).getCreationDate()).isEqualTo(orderDtoResponse.getItems().get(0).getCreationDate());
+        assertThat(orderDtoResponse.getItems().get(0).getExpirationDate()).isEqualTo(orderDtoResponse.getItems().get(0).getExpirationDate());
+        assertThat(orderDtoResponse.getItems().get(0).getAmount()).isEqualTo(orderDtoResponse.getItems().get(0).getAmount());
+        assertThat(orderDtoResponse.getAmount()).isEqualTo(orderDtoResponse.getAmount());
+        assertThat(orderDtoResponse.getOrderStatus()).isEqualTo(orderDtoResponse.getOrderStatus());
+        assertThat(orderDtoResponse.getPaymentStatus()).isEqualTo(orderDtoResponse.getPaymentStatus());
     }
 }
