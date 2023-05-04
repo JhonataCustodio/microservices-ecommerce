@@ -47,5 +47,23 @@ public class OrderConstants {
                 setPaymentStatus(PaymentStatus.APPROVED);
             }}
     );
+    static List<ItemsDtoResponse> items = Collections.singletonList(
+            new ItemsDtoResponse(
+                    4,
+                    "item name",
+                    "item description",
+                    LocalDate.of(2023, 4, 6),
+                    LocalDate.of(2025, 1, 1),
+                    30.0
+            )
+    );
+    public static final OrderDtoResponse ORDER_RESPONSE = new OrderDtoResponse(
+            1,
+            "cpf1",
+            items,
+            10.0,
+            OrderStatus.FINISHED,
+            PaymentStatus.APPROVED
+    );
 
 }
