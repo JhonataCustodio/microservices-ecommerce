@@ -55,4 +55,27 @@ public class OrderControllerTest {
         assertThat(orders.get(0).getOrderStatus()).isEqualTo(orderDtoResponse.getOrderStatus());
         assertThat(orders.get(0).getPaymentStatus()).isEqualTo(orderDtoResponse.getPaymentStatus());
     }
+    @Test
+    public void getByCpf_ReturnsListOfOrderDtoResponse(){
+        String cpf = OrderConstants.ORDER.getCpf();
+        when(orderService.getByCpf(cpf)).thenReturn(OrderConstants.ORDER_LIST);
+        ResponseEntity<List<OrderDtoResponse>> response = orderController.getByCpf(cpf);
+
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+
+        OrderDtoResponse orderDtoResponse = response.getBody().get(0);
+        assertEquals(OrderConstants.ORDER.getId(), orderDtoResponse.getId());
+        assertThat(OrderConstants.ORDER.getCpf()).isEqualTo(orderDtoResponse.getCpf());
+        assertThat(OrderConstants.ORDER.getItems().get(0).getId()).isEqualTo(orderDtoResponse.getItems().get(0).getId());
+        assertThat(OrderConstants.ORDER.getItems().get(0).getName()).isEqualTo(orderDtoResponse.getItems().get(0).getName());
+        assertThat(OrderConstants.ORDER.getItems().get(0).getDescription()).isEqualTo(orderDtoResponse.getItems().get(0).getDescription());
+        assertThat(OrderConstants.ORDER.getItems().get(0).getCreationDate()).isEqualTo(orderDtoResponse.getItems().get(0).getCreationDate());
+        assertThat(OrderConstants.ORDER.getItems().get(0).getExpirationDate()).isEqualTo(orderDtoResponse.getItems().get(0).getExpirationDate());
+        assertThat(OrderConstants.ORDER.getItems().get(0).getAmount()).isEqualTo(orderDtoResponse.getItems().get(0).getAmount());
+        assertThat(OrderConstants.ORDER.getAmount()).isEqualTo(orderDtoResponse.getAmount());
+        assertThat(OrderConstants.ORDER.getOrderStatus()).isEqualTo(orderDtoResponse.getOrderStatus());
+        assertThat(OrderConstants.ORDER.getPaymentStatus()).isEqualTo(orderDtoResponse.getPaymentStatus());
+    }
 }
