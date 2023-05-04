@@ -1,11 +1,9 @@
 package br.com.compass.uol.order.domain.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import br.com.compass.uol.order.common.OrderConstants;
-import br.com.compass.uol.order.domain.dto.request.OrderDtoRequest;
 import br.com.compass.uol.order.domain.dto.response.OrderDtoResponse;
 
 import br.com.compass.uol.order.domain.entity.Order;
@@ -42,14 +40,7 @@ public class OrderServiceTest {
     private OrderValidationFactory orderValidationFactory;
     @Mock
     private RabbitTemplate template;
-//    @Test
-//    public void createOrder_WithValidData_ReturnsOrder() {
-//        OrderDtoRequest orderToSave = OrderConstants.CREATE_ORDER;
-//        when(orderRepository.save(any(Order.class))).thenReturn(orderToSave);
-//        OrderDtoResponse result = orderService.save(orderToSave);
-//        verify(orderRepository, times(1)).save(orderToSave);
-//        assertThat(result).isEqualTo(orderToSave);
-//    }
+
     @Test
     public void getAll_WithValidData_ReturnsListOfOrders() {
         Order order = OrderConstants.ORDER;
