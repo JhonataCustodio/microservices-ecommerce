@@ -122,6 +122,14 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.valueOf(request.getOrderStatus().toString()));
         order.setPaymentStatus(PaymentStatus.valueOf(request.getPaymentStatus().toString()));
         orderRepository.save(order);
-        return modelMapper.map(order, OrderDtoResponse.class);
+        OrderDtoResponse orderDtoResponse = new OrderDtoResponse();
+        orderDtoResponse.setId(order.getId());
+        orderDtoResponse.setCpf(order.getCpf());
+        orderDtoResponse.setItems(ItemsDtoResponseFactory.createFromItems(order.getItems()));
+        orderDtoResponse.setAmount(order.getAmount());
+        orderDtoResponse.setOrderStatus(order.getOrderStatus());
+        orderDtoResponse.setPaymentStatus(order.getPaymentStatus());
+        return orderDtoResponse;
+
     }
 }
