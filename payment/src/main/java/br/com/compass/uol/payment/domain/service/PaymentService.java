@@ -21,9 +21,12 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
     public List<PaymentDtoResponse> getAll(){
         List<Payment> payments = paymentRepository.findAll();
-        List<PaymentDtoResponse> paymentDtoResponses = payments.stream()
-                .map(payment -> modelMapper.map(payment, PaymentDtoResponse.class)).collect(Collectors.toList());
-        return  paymentDtoResponses;
+        return payments.stream()
+                .map(payment -> new PaymentDtoResponse(
+                        payment.getOrderId(),
+                        payment.getTotalOrder(),
+                        payment.getPaymentStatus()
+                )).collect(Collectors.toList());
     }
     @RabbitListener(queues = RabbitMQConfig.QUEUE)
     public void receiveMessage(PaymentDtoRequest request) {
