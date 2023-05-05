@@ -59,7 +59,7 @@ public class OrderConstants {
     );
     public static final OrderDtoResponse ORDER_RESPONSE = new OrderDtoResponse(
             1,
-            "cpf1",
+            "12345678910",
             items,
             10.0,
             OrderStatus.FINISHED,
