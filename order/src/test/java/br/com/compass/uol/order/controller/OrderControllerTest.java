@@ -15,13 +15,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
-
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -124,5 +121,16 @@ public class OrderControllerTest {
         assertThat(orderDtoResponse.getAmount()).isEqualTo(orderDtoResponse.getAmount());
         assertThat(orderDtoResponse.getOrderStatus()).isEqualTo(orderDtoResponse.getOrderStatus());
         assertThat(orderDtoResponse.getPaymentStatus()).isEqualTo(orderDtoResponse.getPaymentStatus());
+    }
+    @Test
+    public void delete_WithValidData_ReturnsMessageOrderRemoved() {
+        Integer id = OrderConstants.ORDER.getId();
+        when(orderService.delete(id)).thenReturn("Order removed");
+
+        ResponseEntity<String> response = orderController.delete(id);
+
+        verify(orderService).delete(id);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
     }
 }
