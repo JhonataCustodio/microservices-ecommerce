@@ -18,9 +18,20 @@ public class ItemsService {
     @Autowired
     private OrderRepository orderRepository;
     public ItemsDtoResponse save(ItemsDtoRequest request){
-        Items items = modelMapper.map(request, Items.class);
+        Items items = new Items();
+        items.setName(request.getName());
+        items.setDescription(request.getDescription());
+        items.setCreationDate(request.getCreationDate());
+        items.setExpirationDate(request.getExpirationDate());
+        items.setAmount(request.getAmount());
         itemsRepository.save(items);
-        ItemsDtoResponse itemsDtoResponse = modelMapper.map(items, ItemsDtoResponse.class);
+        ItemsDtoResponse itemsDtoResponse = new ItemsDtoResponse();
+        itemsDtoResponse.setId(items.getId());
+        itemsDtoResponse.setName(items.getName());
+        itemsDtoResponse.setDescription(items.getDescription());
+        itemsDtoResponse.setCreationDate(items.getCreationDate());
+        itemsDtoResponse.setExpirationDate(items.getExpirationDate());
+        itemsDtoResponse.setAmount(items.getAmount());
         return  itemsDtoResponse;
     }
 }
